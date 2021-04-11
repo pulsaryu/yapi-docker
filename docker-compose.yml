@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  yapi:
+    build: .
+    ports:
+      - 3000:3000
+      - 9090:9090
+    depends_on:
+      - mongo
+    volumes:
+      - ./config.json:/app/config.json
+  mongo:
+    image: mongo:4
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: ad2lk8@s
+      MONGO_INITDB_DATABASE: yapi
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+      - ./mongo-data:/data/db
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
